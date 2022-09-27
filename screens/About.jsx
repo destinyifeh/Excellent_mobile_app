@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { View, Text, StyleSheet, ImageBackground } from "react-native";
+import themeContext from "../config/themeContext";
+
 export default function About() {
+  const theme = useContext(themeContext);
   const Image = require("../assets/Images/pat3.jpg");
   return (
     <View styles={styles.container}>

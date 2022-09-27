@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   FlatList,
   RefreshControl,
@@ -7,15 +7,19 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Card, Paragraph, Title } from "react-native-paper";
+import { Card, Paragraph, Title, useTheme } from "react-native-paper";
+
 import Footer from "../components/Footer";
 import Loader from "../components/Loader";
+import themeContext from "../config/themeContext";
 const Posts = ({ navigation }) => {
+  const { colors } = useTheme();
   const [posts, setPosts] = useState("");
   const [pageSize, setPageSize] = useState(5);
   const [page, setPage] = useState(1);
   const [refreshing, setRefreshing] = useState(false);
 
+  const theme = useContext(themeContext);
   const url = ` https://newsapi.org/v2/top-headlines?country=ng&apiKey=18d1a6073be547cdb406f383c6e53b60`;
   // const url2 =
   //   "https://newsdata.io/api/1/news?country=ng&apikey=pub_102542667272d2fef280f4fc0b378d2e548a8&category=top";
@@ -48,7 +52,13 @@ const Posts = ({ navigation }) => {
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: "center" }}>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        backgroundColor: theme.background,
+      }}
+    >
       {posts && posts.length > 0 ? (
         <>
           <Text
@@ -57,6 +67,7 @@ const Posts = ({ navigation }) => {
               marginVertical: 10,
               textAlign: "center",
               fontSize: 16,
+              color: colors.text,
             }}
           >
             All Trending News

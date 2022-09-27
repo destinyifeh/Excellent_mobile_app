@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   ImageBackground,
   RefreshControl,
@@ -9,7 +9,9 @@ import { Card, Paragraph, Title } from "react-native-paper";
 import Footer from "../components/Footer";
 import Loader from "../components/Loader";
 import { formatDate } from "../utils/formatter";
+import themeContext from "../config/themeContext";
 export default function ShowDetail({ route }) {
+  const theme = useContext(themeContext);
   const [isLoading, setIsLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const { title, description, source, publishedAt, urlToImage, url, author } =

@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   FlatList,
   RefreshControl,
@@ -9,10 +9,14 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Button, Card, Paragraph, Title } from "react-native-paper";
+
+import { Button, Card, Paragraph, Title, useTheme } from "react-native-paper";
 import { todayDate } from "../utils/formatter";
 import CustomButton from "./CustomButton";
+import themeContext from "../config/themeContext";
 const Contents = () => {
+  const { colors } = useTheme();
+  const theme = useContext(themeContext);
   const [posts, setPosts] = useState("");
   const [pageSize, setPageSize] = useState(5);
   const [page, setPage] = useState(1);
@@ -53,15 +57,13 @@ const Contents = () => {
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: "center" }}>
-      <Text
-        style={{
-          fontWeight: "bold",
-          marginVertical: 10,
-          textAlign: "center",
-          fontSize: 17,
-        }}
-      >
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "center",
+      }}
+    >
+      <Text style={[styles.title, { color: colors.text }]}>
         {posts.length === 0 ? "No News Yet" : todayDate + " " + "Trending News"}
       </Text>
       <FlatList
@@ -80,7 +82,11 @@ const Contents = () => {
         renderItem={({ item }) => {
           const description = item.description?.slice(0, 80);
           return (
-            <Card style={{ marginVertical: 10 }}>
+            <Card
+              style={{
+                marginVertical: 10,
+              }}
+            >
               <Card.Cover
                 source={
                   item.urlToImage
@@ -123,7 +129,7 @@ const Contents = () => {
                     console.log("des");
                     navigation.navigate("Posts");
                   }}
-                  textColor="red"
+                  textColor={theme.color}
                 >
                   All News
                 </CustomButton>
@@ -140,6 +146,12 @@ const styles = StyleSheet.create({
   btn: {
     justifyContent: "center",
     alignItems: "center",
+  },
+  title: {
+    fontWeight: "bold",
+    marginVertical: 10,
+    textAlign: "center",
+    fontSize: 17,
   },
 });
 export default Contents;

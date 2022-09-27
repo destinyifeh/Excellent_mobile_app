@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, TouchableWithoutFeedback } from "react-native";
+import React, { useState, useEffect, useContext } from "react";
+import { View, Text, TouchableWithoutFeedback, Switch } from "react-native";
 import {
   Avatar,
   Searchbar,
@@ -7,28 +7,49 @@ import {
   Menu,
   Button,
   Provider,
+  useTheme,
 } from "react-native-paper";
+import { Ionicons } from "@expo/vector-icons";
+import { EventRegister } from "react-native-event-listeners";
+import themeContext from "../config/themeContext";
 const Header = ({ back, navigation }) => {
+  const { colors } = useTheme();
+  const theme = useContext(themeContext);
   const [text, setText] = useState("");
   const [visible, setVisible] = useState(false);
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
+  const [isEnabled, setIsEnabled] = useState(false);
+  // const toggleSwitch = () => setIsEnabled((prevState) => !prevState);
   const textChange = (text) => {
     setText(text);
   };
+
   return (
     <View style={{ backgroundColor: "#fff" }}>
       <Appbar.Header>
         {back ? <Appbar.BackAction onPress={navigation.goBack} /> : null}
-        <Appbar.Content title="Excellent" titleStyle={{ color: "red" }} />
+        <Appbar.Content
+          title="Excellent"
+          titleStyle={isEnabled ? { color: colors.text } : { color: "red" }}
+        />
         <Appbar.Action
           icon="magnify"
           size={25}
-          iconColor="red"
+          iconColor={isEnabled ? theme.color : "red"}
           onPress={() => {
             navigation.navigate("Search");
           }}
         />
+        <Switch
+          value={isEnabled}
+          onValueChange={(value) => {
+            setIsEnabled(value), EventRegister.emit("changeTheme", value);
+          }}
+          trackColor={{ false: "#767577", true: "pink" }}
+          thumbColor="#f4f3f4"
+        />
+
         {!back ? (
           <Menu
             visible={visible}
@@ -36,7 +57,7 @@ const Header = ({ back, navigation }) => {
             anchor={
               <Appbar.Action
                 icon="menu"
-                color="red"
+                color={isEnabled ? theme.color : "red"}
                 onPress={openMenu}
                 size={25}
               />
